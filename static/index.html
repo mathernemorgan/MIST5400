@@ -12,7 +12,7 @@
 :root{
   --ink:#0e1411; --ink2:#151c18; --line:#243029; --mute:#8a9a91; --text:#e9f1ec;
   --green:#3ddc84; --green-d:#1f9d5a; --bg:#eef2ef; --card:#fff; --border:#dfe6e1; --t2:#5b6a62; --t1:#101814;
-  --amber:#c77d0a; --amber-bg:#fdf1dc; --r:12px;
+  --amber:#c77d0a; --amber-bg:#fdf1dc; --red:#b3261e; --red-bg:#fde8e6; --r:12px;
   font-family:'Space Grotesk',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
 }
 *{box-sizing:border-box} html,body{margin:0;height:100%}
@@ -61,8 +61,9 @@ main{flex:1;padding:30px 34px;max-width:1180px;min-width:0}
 h2{margin:0;font-size:26px;letter-spacing:-.02em}
 .meta{color:var(--t2);font-size:13px;margin-top:4px}
 .btn{background:#fff;border:1px solid var(--border);border-radius:8px;padding:9px 14px;font-size:13px;color:var(--t1)}
-.btn:hover{border-color:#b9c6be}
+.btn:hover{border-color:#b9c6be}.btn:disabled{opacity:.5;cursor:wait}
 .btn.dark{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn.green{background:var(--green);border-color:var(--green);color:#06210f;font-weight:700}
 .btn.sm{padding:6px 12px;font-size:12px}
 .prog{margin:22px 0 6px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--t2)}
 .bar{flex:0 1 240px;height:6px;background:#d6dfd9;border-radius:99px;overflow:hidden;min-width:120px}
@@ -79,8 +80,9 @@ h2{margin:0;font-size:26px;letter-spacing:-.02em}
 .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
 .tag{font-size:11px;background:#eef2ef;border-radius:6px;padding:3px 8px;color:var(--t2)}
 .tag.g{background:#dff7e9;color:var(--green-d);font-weight:600}
-.badge{font-size:10px;font-weight:700;letter-spacing:.05em;border-radius:5px;padding:2px 7px;background:#e6ebe8;color:var(--t2)}
+.badge{font-size:10px;font-weight:700;letter-spacing:.05em;border-radius:5px;padding:2px 7px;background:#e6ebe8;color:var(--t2);display:inline-block}
 .badge.done{background:#dff7e9;color:var(--green-d)}.badge.doing{background:var(--amber-bg);color:var(--amber)}
+.badge.warn{background:var(--amber-bg);color:var(--amber)}.badge.bad{background:var(--red-bg);color:var(--red)}
 .act{display:flex;flex-direction:column;gap:8px;flex-shrink:0}
 .check{width:26px;height:26px;border-radius:50%;background:var(--green);color:#06210f;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
 .side .card h4{margin:0 0 10px;font-size:13px}
@@ -95,20 +97,47 @@ details.insight h5{margin:12px 0 4px;font-size:11px;letter-spacing:.05em;text-tr
 details.insight ul{margin:0;padding-left:18px;line-height:1.55}
 .banner{background:var(--amber-bg);color:#7a4b04;border-radius:8px;padding:9px 12px;font-size:12px;margin-top:14px}
 .empty{color:var(--t2);font-size:13px;padding:8px 0}
-.log{white-space:pre-wrap;background:#f5f8f6;border-radius:8px;padding:10px 12px;font-size:13px;margin-top:8px;color:var(--t1)}
+.log{white-space:pre-wrap;background:#f5f8f6;border-radius:8px;padding:10px 12px;font-size:13px;margin-top:8px;color:var(--t1);max-height:220px;overflow:auto}
+
+/* ---------- Workbook ---------- */
+.wb{max-width:860px}
+.wb h4{margin:0 0 8px;font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--t2)}
+.wb p{font-size:14px;line-height:1.6;margin:0 0 8px}
+.wb ol{margin:0;padding-left:0;list-style:none;counter-reset:s}
+.wb ol li{counter-increment:s;position:relative;padding:0 0 14px 38px;font-size:14px;line-height:1.55}
+.wb ol li::before{content:counter(s);position:absolute;left:0;top:0;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--green);font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center}
+.wb ol li b{display:block}.wb ol li span.min{color:var(--t2);font-size:12px}
+.mat .mh{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.mat pre{margin:0;background:#0f1512;color:#d7efe0;border-radius:8px;padding:12px;font-size:12px;line-height:1.5;overflow:auto;max-height:260px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre}
+.rub{display:grid;gap:10px}.rub div{font-size:14px;line-height:1.5}.rub small{display:block;color:var(--t2);font-size:12px}
+.wb textarea{width:100%;min-height:200px;border:1px solid var(--border);border-radius:8px;padding:12px;font-size:13px;line-height:1.5;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;resize:vertical}
+.wb textarea:focus{outline:2px solid var(--green);border-color:transparent}
+.sub-row{display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap}
+.sub-row .meta{margin:0}
+.rev h3{margin:0 0 6px;font-size:15px}
+.crit{border-top:1px solid var(--border);padding:12px 0;font-size:13px;line-height:1.5}
+.crit:first-of-type{border-top:0}
+.crit .c{font-weight:600;font-size:14px;margin-bottom:4px}
+.crit em{color:var(--t2)}
+.crit .fix{margin-top:4px}.crit .fix b{color:var(--red)}
+.res{font-size:10px;font-weight:700;letter-spacing:.05em;border-radius:5px;padding:2px 7px;margin-right:6px}
+.res.met{background:#dff7e9;color:var(--green-d)}.res.partly{background:var(--amber-bg);color:var(--amber)}.res.not_yet{background:var(--red-bg);color:var(--red)}
+.passbox{background:#dff7e9;border:1px solid #a7e8c3;border-radius:var(--r);padding:14px 18px;margin-bottom:12px;font-size:14px}
+.spin{display:flex;align-items:center;gap:12px;color:var(--t2);font-size:14px}
+.spin i{width:14px;height:14px;border-radius:50%;border:2px solid var(--green);border-right-color:transparent;animation:rot .8s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
 
 /* modal + toast */
 .scrim{position:fixed;inset:0;background:rgba(10,16,13,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:10}
 .modal{background:#fff;color:var(--t1);border-radius:14px;padding:22px;width:100%;max-width:460px}
 .modal h3{margin:0 0 4px}.modal p{margin:0 0 12px;color:var(--t2);font-size:13px}
-.modal textarea{width:100%;min-height:110px;border:1px solid var(--border);border-radius:8px;padding:10px;font-size:14px}
 .modal .r{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
-#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:8px;font-size:13px;z-index:20}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:8px;font-size:13px;z-index:20;max-width:90vw}
 
 @media(max-width:860px){
   #app{flex-direction:column}
   aside{width:100%;height:auto;position:static;flex-direction:row;align-items:center;gap:12px;padding:12px 14px;overflow-x:auto}
-  aside nav{margin:0;display:flex}.who{display:none}
+  aside nav{margin:0;display:flex}.who{margin:0 0 0 auto;padding:6px 10px;font-size:11px;white-space:nowrap}.who b,.who br{display:none}
   main{padding:20px 16px}.grid{grid-template-columns:1fr}.row{grid-template-columns:1fr}
   .task{flex-direction:column}.act{flex-direction:row}
 }
@@ -121,7 +150,7 @@ details.insight ul{margin:0;padding-left:18px;line-height:1.55}
   <div class="panel">
     <div class="logo"><b>AI</b>ntern</div>
     <h1>Tell us about your internship</h1>
-    <p class="sub">We'll research the role and build a personalized curriculum of tasks and modules, so you leave with real skills, not just a resume line.</p>
+    <p class="sub">We'll research the role and build a personalized curriculum. Each task opens a practice workbook with a scenario, working materials and a rubric, and your work gets real feedback before it counts.</p>
     <form id="form" autocomplete="off">
       <div class="examples"><span>Try an example:</span>
         <button type="button" class="chipbtn" data-ex="0">Fintech SWE</button>
@@ -166,9 +195,13 @@ details.insight ul{margin:0;padding-left:18px;line-height:1.55}
 <div id="toast" class="hidden"></div>
 
 <script>
-const KEY = 'aintern_state_v1';
-let S = null;           // app state
+const KEY = 'aintern_state_v2';
+let S = null;           // app state (persisted)
 let view = 'dashboard';
+let openId = null;      // task whose workbook is open
+let busy = null;        // 'wb:<id>' or 'rv:<id>' while an AI call runs
+const errs = {};        // per-task workbook error messages (not persisted)
+const MAX_FREE_ATTEMPTS = 3;
 
 const EXAMPLES = [
   {company:'Acme Corp', industry:'Fintech', job_title:'Software Engineering Intern',
@@ -186,7 +219,7 @@ const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
 function load(){ try{ return JSON.parse(localStorage.getItem(KEY)); }catch(e){ return null; } }
-function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.remove('hidden'); clearTimeout(toast.t); toast.t=setTimeout(()=>t.classList.add('hidden'),3200); }
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.remove('hidden'); clearTimeout(toast.t); toast.t=setTimeout(()=>t.classList.add('hidden'),4200); }
 
 /* ---------------- API ---------------- */
 async function api(path, body){
@@ -195,7 +228,7 @@ async function api(path, body){
   try{ data = await r.json(); }catch(e){}
   if(!r.ok){
     let msg = data.detail;
-    if(Array.isArray(msg)) msg = 'Please check the form: ' + msg.map(d=>(d.loc||[]).slice(-1)[0]+' '+d.msg).join('; ');
+    if(Array.isArray(msg)) msg = 'Please check your input: ' + msg.map(d=>(d.loc||[]).slice(-1)[0]+' '+d.msg).join('; ');
     throw new Error(msg || 'Request failed ('+r.status+')');
   }
   return data;
@@ -206,11 +239,11 @@ document.querySelectorAll('[data-ex]').forEach(b => b.onclick = () => {
   const ex = EXAMPLES[+b.dataset.ex];
   Object.keys(ex).forEach(k => $('#'+k).value = ex[k]);
 });
-
 function setStep(n){
   $('#steps').classList.remove('hidden');
   ['s1','s2'].forEach((id,i)=>{ const e=$('#'+id); e.className='step'+(i+1<n?' ok':i+1===n?' on':''); });
 }
+const newTask = t => ({...t, status:'todo', workbook:null, attempts:[], draft:'', verified:false, selfCertified:false});
 
 $('#form').onsubmit = async ev => {
   ev.preventDefault();
@@ -222,8 +255,7 @@ $('#form').onsubmit = async ev => {
     const {brief} = await api('/api/research', intake);
     setStep(2);
     const plan = await api('/api/curriculum', {intake, brief});
-    S = {intake, brief, tasks: plan.tasks.map(t=>({...t, status:'todo', log:''})), mode:plan.mode,
-         goal_coverage:plan.goal_coverage, sample:false};
+    S = {intake, brief, tasks: plan.tasks.map(newTask), mode:plan.mode, goal_coverage:plan.goal_coverage, sample:false};
     save(); view='dashboard'; showApp();
   }catch(e){
     const box=$('#err');
@@ -234,37 +266,32 @@ $('#form').onsubmit = async ev => {
     $('#go').disabled=false; $('#go').textContent='Build my curriculum →'; $('#steps').classList.add('hidden');
   }
 };
-
 async function loadSample(){
   try{
     const d = await (await fetch('/static/sample.json')).json();
-    S = {intake:d.intake, brief:d.brief, tasks:d.tasks.map(t=>({...t,status:'todo',log:''})), mode:d.mode,
-         goal_coverage:d.goal_coverage, sample:true};
+    S = {intake:d.intake, brief:d.brief, tasks:d.tasks.map(newTask), mode:d.mode, goal_coverage:d.goal_coverage, sample:true};
     save(); view='dashboard'; showApp();
   }catch(e){ toast('Could not load the saved example.'); }
 }
 
-/* ---------------- App ---------------- */
-function showApp(){
-  $('#intake').classList.add('hidden'); $('#app').classList.remove('hidden');
-  render();
-}
-function showIntake(){
-  $('#app').classList.add('hidden'); $('#intake').classList.remove('hidden');
-}
+/* ---------------- Shell ---------------- */
+function showApp(){ $('#intake').classList.add('hidden'); $('#app').classList.remove('hidden'); render(); }
+function showIntake(){ $('#app').classList.add('hidden'); $('#intake').classList.remove('hidden'); }
 document.querySelectorAll('.nav').forEach(b => b.onclick = () => { view=b.dataset.view; render(); window.scrollTo(0,0); });
 
+const find = id => S.tasks.find(t=>t.id===id);
 const done = () => S.tasks.filter(t=>t.status==='done');
 const open = () => S.tasks.filter(t=>t.status!=='done')
   .sort((a,b)=> (b.status==='doing')-(a.status==='doing') || b.priority-a.priority);
 const hrs = list => list.reduce((s,t)=>s+(+t.est_hours||0),0);
+const lastAttempt = t => t.attempts[t.attempts.length-1];
 
 function render(){
-  document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('on', b.dataset.view===view));
+  document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('on', b.dataset.view===(view==='task'?'dashboard':view)));
   const i = S.intake;
   $('#who').innerHTML = `<b>${esc(i.job_title)}</b>${esc(i.company)}<br>${esc(i.industry)}<br><button id="newplan">Start over</button>`;
-  $('#newplan').onclick = () => { if(confirm('Start over? This clears your current plan from this browser.')){ localStorage.removeItem(KEY); S=null; showIntake(); } };
-  $('#main').innerHTML = view==='curriculum' ? vCurriculum() : view==='progress' ? vProgress() : vDashboard();
+  $('#newplan').onclick = () => { if(confirm('Start over? This clears your plan, work and feedback from this browser.')){ localStorage.removeItem(KEY); S=null; showIntake(); } };
+  $('#main').innerHTML = view==='task' ? vTask() : view==='curriculum' ? vCurriculum() : view==='progress' ? vProgress() : vDashboard();
   bind();
 }
 
@@ -277,23 +304,24 @@ function header(title){
 function progressRow(){
   const d=done().length, n=S.tasks.length, left=hrs(open());
   return `<div class="prog"><span>${d} of ${n} tasks complete</span><div class="bar"><i style="width:${n?100*d/n:0}%"></i></div>
-    <span class="pill">~${left} hrs remaining</span><span class="pill">ranked by ${esc(S.mode)}</span></div>`;
+    <span class="pill">~${left} hrs of practice left</span><span class="pill">ranked by ${esc(S.mode)}</span></div>`;
 }
+const statusBadge = t => t.status==='done'
+  ? (t.verified ? '<span class="badge done">VERIFIED</span>' : '<span class="badge warn">SELF-CERTIFIED</span>')
+  : t.status==='doing' ? '<span class="badge doing">IN PROGRESS</span>' : '<span class="badge">UP NEXT</span>';
 
 function taskCard(t, focus){
-  const isDone = t.status==='done';
-  const badge = isDone?'<span class="badge done">DONE</span>':t.status==='doing'?'<span class="badge doing">IN PROGRESS</span>':'<span class="badge">UP NEXT</span>';
-  const act = isDone ? '<div class="check">✓</div>' :
-    `<div class="act">${t.status==='doing'
-       ? `<button class="btn dark sm" data-finish="${t.id}">Mark done</button>`
-       : `<button class="btn dark sm" data-start="${t.id}">Start</button>`}</div>`;
+  const la = lastAttempt(t);
+  const btn = t.status==='done' ? `<button class="btn sm" data-open="${t.id}">View work</button>`
+    : t.status==='doing' ? `<button class="btn dark sm" data-open="${t.id}">Continue</button>`
+    : `<button class="btn dark sm" data-open="${t.id}">Open workbook</button>`;
   return `<div class="card task ${focus?'focus':''}"><div>
-    ${badge}<h3>${esc(t.title)}</h3><p>${esc(t.objective)}</p>
-    <p class="deliv"><b>Deliverable:</b> ${esc(t.deliverable)}</p>
+    ${statusBadge(t)}<h3>${esc(t.title)}</h3><p>${esc(t.objective)}</p>
+    <p class="deliv"><b>You will produce:</b> ${esc(t.deliverable)}</p>
     <div class="tags"><span class="tag g">${t.relevance}% match · ${esc(t.best_goal)}</span>
-      <span class="tag">~${t.est_hours} hr</span><span class="tag">${esc(t.stage)}</span></div>
-    ${isDone && t.log ? `<div class="log">${esc(t.log)}</div>`:''}
-  </div>${act}</div>`;
+      <span class="tag">~${t.est_hours} hr</span><span class="tag">${esc(t.stage)}</span>
+      ${t.attempts.length?`<span class="tag">${t.attempts.length} review${t.attempts.length>1?'s':''}${la&&!t.verified?' · last: needs revision':''}</span>`:''}</div>
+  </div><div class="act">${btn}</div></div>`;
 }
 
 function sideCol(){
@@ -301,8 +329,8 @@ function sideCol(){
   return `<div class="side">
     <div class="card"><h4>Skills you're building</h4>${(S.goal_coverage||[]).map(g=>
       `<div class="skill">${esc(g.goal)} <span style="float:right;color:var(--t2)">${g.pct}%</span><div class="bar"><i style="width:${g.pct}%"></i></div></div>`).join('')}</div>
-    ${o?`<div class="focuscard"><small>This week's focus</small><p>${esc(o.title)}. ${esc(o.deliverable)}</p></div>`:
-        `<div class="focuscard"><small>All done</small><p>Every task is complete. Export your deliverables from the Progress tab.</p></div>`}
+    ${o?`<div class="focuscard"><small>This week's focus</small><p>${esc(o.title)}. You will produce: ${esc(o.deliverable)}</p></div>`:
+        `<div class="focuscard"><small>All done</small><p>Every task is complete. Export your work from the Progress tab.</p></div>`}
     <div class="card"><h4>Built from</h4><div class="kv"><b>Company</b> ${esc(i.company)}<br><b>Industry</b> ${esc(i.industry)}<br><b>Role</b> ${esc(i.job_title)}</div></div>
   </div>`;
 }
@@ -318,6 +346,7 @@ function insight(){
     <p style="font-size:11px;margin-top:12px">Based on what you entered and general industry knowledge, not live research on your company.</p></details>`;
 }
 
+/* ---------------- Views ---------------- */
 function vDashboard(){
   const o=open(), d=done();
   return header('Your curriculum') + progressRow() + `<div class="grid"><div>
@@ -339,35 +368,121 @@ function vCurriculum(){
 
 function vProgress(){
   const d=done().sort((a,b)=>(a.doneAt||0)-(b.doneAt||0));
+  const ver = d.filter(t=>t.verified).length;
   return header('Your progress') + progressRow() + `<div class="grid"><div>
-    <div class="sec">Deliverables log</div>
-    ${d.length? d.map(t=>`<div class="card"><span class="badge done">DONE</span><h3 style="margin:6px 0">${esc(t.title)}</h3>
-        <p class="meta">${esc(t.deliverable)}</p>${t.log?`<div class="log">${esc(t.log)}</div>`:'<div class="meta">No notes logged.</div>'}</div>`).join('')
-      : '<div class="empty">Finish a task and log what you produced. It will show up here.</div>'}
-    ${d.length?'<button class="btn" id="export">Export deliverables (.md)</button>':''}
+    <div class="sec">${ver} verified · ${d.length-ver} self-certified</div>
+    ${d.length? d.map(t=>{ const a=lastAttempt(t); return `<div class="card">${statusBadge(t)}<h3 style="margin:6px 0">${esc(t.title)}</h3>
+        <p class="meta">${esc(t.deliverable)}</p>
+        ${a?`<p style="font-size:13px;margin:8px 0 0"><b>Reviewer:</b> ${esc(a.review.summary)}</p><div class="log">${esc(a.submission)}</div>`:'<div class="meta">No submission on record.</div>'}
+        <div style="margin-top:8px"><button class="btn sm" data-open="${t.id}">Open</button></div></div>`; }).join('')
+      : '<div class="empty">Complete a workbook and pass its review. Your verified work shows up here.</div>'}
+    ${d.length?'<button class="btn" id="export">Export your work (.md)</button>':''}
   </div>${sideCol()}</div>`;
 }
 
-/* ---------------- Actions ---------------- */
-function bind(){
-  document.querySelectorAll('[data-start]').forEach(b=>b.onclick=()=>{ find(b.dataset.start).status='doing'; save(); render(); });
-  document.querySelectorAll('[data-finish]').forEach(b=>b.onclick=()=>finishDialog(b.dataset.finish));
-  const rg=$('#regen'); if(rg) rg.onclick=()=>{ if(confirm('Generate a fresh plan from your original inputs? Your progress on this plan will be lost.')) regenerate(); };
-  const ex=$('#export'); if(ex) ex.onclick=exportMd;
+/* ----- Workbook page ----- */
+function reviewHTML(t, a, n, total, latest){
+  const r=a.review;
+  const vl = {needs_revision:['NEEDS REVISION','bad'], meets_bar:['MEETS THE BAR','done'], strong:['STRONG','done']}[a.verdict]||['REVIEWED','warn'];
+  return `<details class="card rev" ${latest?'open':''}><summary style="cursor:pointer;font-weight:600">Attempt ${n} <span class="badge ${vl[1]}" style="margin-left:8px">${vl[0]}</span></summary>
+    <p style="font-size:14px;line-height:1.55;margin:12px 0 4px">${esc(r.summary)}</p>
+    ${r.criteria.map(c=>`<div class="crit"><div class="c"><span class="res ${c.result}">${c.result==='met'?'MET':c.result==='partly'?'PARTLY':'NOT YET'}</span>${esc(c.criterion)}</div>
+      <div><em>Evidence:</em> ${esc(c.evidence)}</div>${c.fix?`<div class="fix"><b>Fix:</b> ${esc(c.fix)}</div>`:''}</div>`).join('')}
+    ${r.next_steps&&r.next_steps.length?`<div class="sec" style="margin:12px 0 6px">Next steps</div><ul style="margin:0;padding-left:18px;font-size:13px;line-height:1.55">${r.next_steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}
+  </details>`;
 }
-const find = id => S.tasks.find(t=>t.id===id);
 
-function finishDialog(id){
-  const t=find(id), m=$('#modal');
-  m.innerHTML=`<div class="modal"><h3>Log your output</h3><p>${esc(t.title)}<br>Deliverable: ${esc(t.deliverable)}</p>
-    <textarea id="logtxt" maxlength="1500" placeholder="What did you produce? Paste a link or a few notes (optional)."></textarea>
-    <div class="r"><button class="btn" id="mc">Cancel</button><button class="btn dark" id="ms">Save and re-rank</button></div></div>`;
-  m.classList.remove('hidden');
-  $('#mc').onclick=()=>m.classList.add('hidden');
-  $('#ms').onclick=async()=>{
-    t.status='done'; t.log=$('#logtxt').value.trim(); t.doneAt=Date.now();
-    m.classList.add('hidden'); save(); render(); await rerank();
-  };
+function vTask(){
+  const t = find(openId);
+  if(!t){ view='dashboard'; return vDashboard(); }
+  const back = `<button class="btn sm" id="back">&larr; Back to plan</button>`;
+  const head = `<div style="margin:14px 0 4px">${statusBadge(t)}</div><h2>${esc(t.title)}</h2>
+    <div class="meta">${esc(t.stage)} · ~${t.est_hours} hr · you will produce: ${esc(t.deliverable)}</div>`;
+  if(!t.workbook){
+    const loading = busy==='wb:'+t.id;
+    return `<div class="wb">${back}${head}<div class="card" style="margin-top:18px">${loading
+      ? '<div class="spin"><i></i>Building your workbook: scenario, materials and rubric. This takes 20 to 40 seconds.</div>'
+      : `<p>${esc(errs[t.id]||'Workbook not loaded.')}</p><button class="btn dark sm" id="retrywb">Try again</button>`}</div></div>`;
+  }
+  const w=t.workbook, la=lastAttempt(t), reviewing = busy==='rv:'+t.id;
+  const passed = t.status==='done';
+  const mats = (w.materials||[]).map((m,i)=>`<div class="card mat"><div class="mh"><div><b>${esc(m.name)}</b> <span class="tag">${esc(m.kind)}</span></div>
+      <div><button class="btn sm" data-copy="${i}">Copy</button> <button class="btn sm" data-dl="${i}">Download</button></div></div><pre>${esc(m.content)}</pre></div>`).join('');
+  const attempts = t.attempts.map((a,i)=>reviewHTML(t,a,i+1,t.attempts.length,i===t.attempts.length-1)).reverse().join('');
+  const canSkip = !passed && t.attempts.length>=MAX_FREE_ATTEMPTS;
+  return `<div class="wb">${back}${head}
+    ${passed?`<div class="passbox" style="margin-top:16px"><b>${t.verified?'Verified.':'Marked complete without a passing review.'}</b> ${t.verified?'Your work met the rubric, so this task counts toward your progress.':'This task is labelled self-certified in your progress.'}</div>`:''}
+    <div class="card" style="margin-top:16px"><h4>Scenario</h4><p>${esc(w.scenario)}</p></div>
+    <div class="card"><h4>Your steps</h4><ol>${w.steps.map(s=>`<li><b>${esc(s.title)}</b>${esc(s.detail)} <span class="min">~${s.minutes} min</span></li>`).join('')}</ol></div>
+    ${mats?`<div class="sec" style="margin-top:6px">Materials (synthetic, for practice only)</div>${mats}`:''}
+    <div class="card"><h4>To pass, your work must</h4><div class="rub">${w.rubric.map(r=>`<div>${esc(r.criterion)}<small>${esc(r.what_good_looks_like)}</small></div>`).join('')}</div>
+      ${w.hints&&w.hints.length?`<details style="margin-top:12px;font-size:13px"><summary style="cursor:pointer;color:var(--t2)">Stuck? Hints</summary><ul style="line-height:1.55">${w.hints.map(h=>`<li>${esc(h)}</li>`).join('')}</ul></details>`:''}</div>
+    ${attempts?`<div class="sec" id="fb">Feedback</div>${attempts}`:''}
+    ${passed?'':`<div class="card"><h4>Submit your work for review</h4><p class="meta" style="margin-bottom:10px">${esc(w.submission_format)}</p>
+      <textarea id="work" placeholder="Paste your work here" ${reviewing?'disabled':''}>${esc(t.draft||'')}</textarea>
+      <div class="sub-row"><button class="btn green" id="submit" ${reviewing?'disabled':''}>${reviewing?'Reviewing…':(t.attempts.length?'Resubmit for review':'Get feedback')}</button>
+        ${canSkip?'<button class="btn" id="skip">Move on without a passing review</button>':''}
+        <span class="meta">${reviewing?'Checking your work against the rubric (10 to 30 seconds).':'Attempt '+(t.attempts.length+1)+'. Feedback is specific to each rubric item.'}</span></div></div>`}
+  </div>`;
+}
+
+/* ---------------- Actions ---------------- */
+const taskInfo = t => ({title:t.title, stage:t.stage, objective:t.objective, deliverable:t.deliverable, skills:t.skills||[]});
+
+function openTask(id){
+  openId=id; view='task'; render(); window.scrollTo(0,0);
+  const t=find(id); if(!t.workbook && busy!=='wb:'+id) loadWorkbook(t);
+}
+async function loadWorkbook(t){
+  busy='wb:'+t.id; errs[t.id]=''; render();
+  try{
+    const r = await api('/api/workbook', {intake:S.intake, task:taskInfo(t)});
+    t.workbook = r.workbook; if(t.status==='todo') t.status='doing'; save();
+  }catch(e){ errs[t.id]=e.message; }
+  finally{ busy=null; if(view==='task' && openId===t.id) render(); }
+}
+async function submitWork(id){
+  const t=find(id), text=($('#work')||{}).value||'';
+  if(text.trim().length<30){ toast('Add more detail first. Paste the work you were asked for (at least a few lines).'); return; }
+  t.draft=text; save(); busy='rv:'+id; render();
+  const w=t.workbook, la=lastAttempt(t);
+  try{
+    const r = await api('/api/review', {
+      intake:S.intake, task:taskInfo(t), attempt:t.attempts.length+1, submission:text,
+      workbook:{scenario:w.scenario, submission_format:w.submission_format, rubric:w.rubric,
+        materials:(w.materials||[]).map(m=>({name:m.name, content:m.content})), reviewer_notes:w.reviewer_notes||''},
+      previous_feedback: la ? la.review.criteria.map(c=>({id:c.id,result:c.result,fix:c.fix})) : []
+    });
+    t.attempts.push({submission:text, review:r.review, verdict:r.verdict, at:Date.now()});
+    const pass = r.verdict!=='needs_revision';
+    if(pass){ t.status='done'; t.verified=true; t.doneAt=Date.now(); t.draft=''; }
+    save(); busy=null; render();
+    const fb=$('#fb'); if(fb) fb.scrollIntoView({behavior:'smooth',block:'start'}); else window.scrollTo(0,0);
+    if(pass){ toast('Passed. Re-ranking your plan.'); await rerank(); }
+  }catch(e){ busy=null; render(); toast(e.message); }
+}
+function skipReview(id){
+  if(!confirm('Mark this task complete without a passing review? It will be labelled self-certified.')) return;
+  const t=find(id); t.status='done'; t.selfCertified=true; t.verified=false; t.doneAt=Date.now(); save(); render(); rerank();
+}
+function dl(name, text){
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type:'text/plain'}));
+  a.download=name; a.click(); URL.revokeObjectURL(a.href);
+}
+function bind(){
+  document.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>openTask(b.dataset.open));
+  const rg=$('#regen'); if(rg) rg.onclick=()=>{ if(confirm('Generate a fresh plan from your original inputs? Your work on this plan will be lost.')) regenerate(); };
+  const ex=$('#export'); if(ex) ex.onclick=exportMd;
+  if(view!=='task') return;
+  const t=find(openId); if(!t) return;
+  const bk=$('#back'); if(bk) bk.onclick=()=>{ view='dashboard'; render(); window.scrollTo(0,0); };
+  const rt=$('#retrywb'); if(rt) rt.onclick=()=>loadWorkbook(t);
+  const sb=$('#submit'); if(sb) sb.onclick=()=>submitWork(t.id);
+  const sk=$('#skip'); if(sk) sk.onclick=()=>skipReview(t.id);
+  const wk=$('#work'); if(wk) wk.oninput=()=>{ t.draft=wk.value; save(); };
+  document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=async()=>{
+    try{ await navigator.clipboard.writeText(t.workbook.materials[+b.dataset.copy].content); toast('Copied.'); }catch(e){ toast('Copy failed. Select the text and copy it manually.'); } });
+  document.querySelectorAll('[data-dl]').forEach(b=>b.onclick=()=>{ const m=t.workbook.materials[+b.dataset.dl]; dl(m.name, m.content); });
 }
 
 async function rerank(){
@@ -375,7 +490,7 @@ async function rerank(){
     const r = await api('/api/rerank', {skills:S.intake.skills, tasks:S.tasks.map(t=>({id:t.id,title:t.title,stage:t.stage,objective:t.objective,skills:t.skills,done:t.status==='done'}))});
     const by = Object.fromEntries(r.ranked.map(x=>[x.id,x]));
     S.tasks.forEach(t=>{ const x=by[t.id]; if(x){ t.priority=x.priority; t.relevance=x.relevance; t.best_goal=x.best_goal; } });
-    S.goal_coverage=r.goal_coverage; S.mode=r.mode; save(); render(); toast('Plan re-ranked around what you have finished.');
+    S.goal_coverage=r.goal_coverage; S.mode=r.mode; save(); if(view!=='task') render();
   }catch(e){ toast('Could not re-rank: '+e.message); }
 }
 
@@ -384,17 +499,20 @@ async function regenerate(){
   try{
     const {brief}=await api('/api/research', S.intake);
     const plan=await api('/api/curriculum',{intake:S.intake,brief});
-    S={...S,brief,tasks:plan.tasks.map(t=>({...t,status:'todo',log:''})),mode:plan.mode,goal_coverage:plan.goal_coverage,sample:false};
-    save(); render(); toast('New plan ready.');
+    S={...S,brief,tasks:plan.tasks.map(newTask),mode:plan.mode,goal_coverage:plan.goal_coverage,sample:false};
+    view='dashboard'; save(); render(); toast('New plan ready.');
   }catch(e){ toast(e.message); }
 }
 
 function exportMd(){
   const i=S.intake;
-  let md=`# Internship deliverables\n\n${i.job_title}, ${i.company} (${i.industry})\n\n`;
-  done().forEach(t=>{ md+=`## ${t.title}\n\n- Stage: ${t.stage}\n- Deliverable: ${t.deliverable}\n- Skills: ${(t.skills||[]).join(', ')}\n\n${t.log||'(no notes logged)'}\n\n`; });
-  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([md],{type:'text/markdown'}));
-  a.download='aintern-deliverables.md'; a.click(); URL.revokeObjectURL(a.href);
+  let md=`# Internship practice portfolio\n\n${i.job_title}, ${i.company} (${i.industry})\n\n`;
+  done().forEach(t=>{
+    const a=lastAttempt(t);
+    md+=`## ${t.title}\n\n- Stage: ${t.stage}\n- Status: ${t.verified?'verified by AI review':'self-certified'}\n- Skills: ${(t.skills||[]).join(', ')}\n`;
+    if(a){ md+=`- Reviewer summary: ${a.review.summary}\n\n### Submission\n\n\`\`\`\n${a.submission}\n\`\`\`\n\n`; } else md+='\n';
+  });
+  dl('aintern-portfolio.md', md);
 }
 
 /* ---------------- Boot ---------------- */
