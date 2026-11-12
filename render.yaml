@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: aintern
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.3
+      - key: ANTHROPIC_API_KEY
+        sync: false          # you enter this in the Render dashboard
+      - key: VOYAGE_API_KEY
+        sync: false          # optional; enables embedding-based ranking
+      - key: ANTHROPIC_MODEL
+        value: claude-sonnet-5-5
+      - key: MAX_DAILY_CLAUDE_CALLS
+        value: "300"

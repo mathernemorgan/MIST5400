@@ -1,0 +1,174 @@
+{
+ "intake": {
+  "company": "Acme Corp",
+  "industry": "Fintech",
+  "job_title": "Software Engineering Intern",
+  "job_description": "Backend intern on the payments infrastructure team, working mostly in Go and AWS. You will help maintain services that move money between accounts, fix bugs from the on-call backlog and add small features under a senior engineer.",
+  "skills": "Cloud infrastructure, CI/CD, system design"
+ },
+ "brief": {
+  "role_summary": "A backend intern on a payments infrastructure team, mostly fixing bugs and making small changes to Go services running on AWS. Much of the day is assigned bug work, so broader infrastructure and design skills are easy to miss.",
+  "likely_responsibilities": [
+   "Fix bugs from the on-call backlog",
+   "Add small features to Go services",
+   "Read and follow existing deployment and review processes",
+   "Pair with a senior engineer on code reviews"
+  ],
+  "tools_and_practices": [
+   "Go services on AWS",
+   "Git and pull-request review",
+   "A CI pipeline for builds and tests",
+   "Monitoring and alerting for money-movement services"
+  ],
+  "skill_gaps": [
+   "Hands-on infrastructure as code is unlikely to be assigned to an intern",
+   "CI/CD pipeline design is usually owned by a platform team",
+   "System design is learned by reading and writing designs, which interns rarely do"
+  ],
+  "downtime_opportunities": [
+   "Diagram the services you already touch and how data flows between them",
+   "Practise infrastructure as code in a personal sandbox account",
+   "Write up an incident or bug you fixed as a short postmortem"
+  ],
+  "cautions": [
+   "Do not use production data or credentials for practice work",
+   "Keep sandbox work in a personal or approved account",
+   "Check with your mentor before sharing anything that mentions internal systems"
+  ]
+ },
+ "tasks": [
+  {
+   "title": "Map the payments deployment pipeline",
+   "stage": "Foundations",
+   "objective": "Understand how code you touch gets from a pull request to production.",
+   "deliverable": "A one-page diagram of the build, test and deploy stages, with owners for each.",
+   "est_hours": 2,
+   "skills": [
+    "CI/CD",
+    "cloud infrastructure"
+   ],
+   "id": "t1",
+   "relevance": 62,
+   "best_goal": "Cloud infrastructure",
+   "priority": 0.474
+  },
+  {
+   "title": "Shadow an incident postmortem",
+   "stage": "Foundations",
+   "objective": "See how reliability problems are diagnosed and what gets fixed afterwards.",
+   "deliverable": "A half-page summary of the incident timeline, root cause and follow-up actions.",
+   "est_hours": 2,
+   "skills": [
+    "system design",
+    "reliability"
+   ],
+   "id": "t2",
+   "relevance": 51,
+   "best_goal": "system design",
+   "priority": 0.1969
+  },
+  {
+   "title": "Sketch the architecture of one service you work on",
+   "stage": "Foundations",
+   "objective": "Practise reading a real system and naming its components and failure points.",
+   "deliverable": "An architecture diagram plus a list of three failure modes and how they are handled.",
+   "est_hours": 3,
+   "skills": [
+    "system design"
+   ],
+   "id": "t3",
+   "relevance": 72,
+   "best_goal": "system design",
+   "priority": 0.277
+  },
+  {
+   "title": "Write a Terraform module for a staging environment",
+   "stage": "Apply",
+   "objective": "Learn infrastructure as code by describing a small cloud environment as code.",
+   "deliverable": "A Terraform module in a sandbox account that creates a queue, a function and a storage bucket.",
+   "est_hours": 5,
+   "skills": [
+    "cloud infrastructure",
+    "infrastructure as code"
+   ],
+   "id": "t4",
+   "relevance": 100,
+   "best_goal": "Cloud infrastructure",
+   "priority": 0.3333
+  },
+  {
+   "title": "Add a CI workflow with tests and linting to a side repo",
+   "stage": "Apply",
+   "objective": "Practise building a pipeline that blocks bad changes before merge.",
+   "deliverable": "A repository with a working CI workflow that runs tests and linting on every pull request.",
+   "est_hours": 4,
+   "skills": [
+    "CI/CD"
+   ],
+   "id": "t5",
+   "relevance": 75,
+   "best_goal": "CI/CD",
+   "priority": 0.2502
+  },
+  {
+   "title": "Design a retry-safe money transfer API on paper",
+   "stage": "Apply",
+   "objective": "Apply system design thinking to idempotency, retries and consistency.",
+   "deliverable": "A two-page design doc with an API sketch, a data model and a failure-handling section.",
+   "est_hours": 5,
+   "skills": [
+    "system design",
+    "payments"
+   ],
+   "id": "t6",
+   "relevance": 100,
+   "best_goal": "system design",
+   "priority": 0.3325
+  },
+  {
+   "title": "Add a canary deployment step to your sandbox pipeline",
+   "stage": "Ship",
+   "objective": "Combine pipeline and infrastructure skills into a safer release process.",
+   "deliverable": "A short demo recording and a README showing a canary release with an automatic rollback.",
+   "est_hours": 6,
+   "skills": [
+    "CI/CD",
+    "cloud infrastructure"
+   ],
+   "id": "t7",
+   "relevance": 78,
+   "best_goal": "Cloud infrastructure",
+   "priority": 0.4103
+  },
+  {
+   "title": "Present your design doc and pipeline to your mentor",
+   "stage": "Ship",
+   "objective": "Turn practice work into feedback and visible progress.",
+   "deliverable": "A 10-minute walkthrough with notes on the feedback you received.",
+   "est_hours": 2,
+   "skills": [
+    "system design",
+    "communication"
+   ],
+   "id": "t8",
+   "relevance": 76,
+   "best_goal": "system design",
+   "priority": 0.2284
+  }
+ ],
+ "mode": "keyword fallback (TF-IDF)",
+ "goal_coverage": [
+  {
+   "goal": "Cloud infrastructure",
+   "pct": 0
+  },
+  {
+   "goal": "CI/CD",
+   "pct": 0
+  },
+  {
+   "goal": "system design",
+   "pct": 0
+  }
+ ]
+}

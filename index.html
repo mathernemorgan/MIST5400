@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AIntern</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%788%27 fill=%27%230e1411%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-size=%2716%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%233ddc84%27 font-family=%27sans-serif%27%3EAI%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0e1411; --ink2:#151c18; --line:#243029; --mute:#8a9a91; --text:#e9f1ec;
+  --green:#3ddc84; --green-d:#1f9d5a; --bg:#eef2ef; --card:#fff; --border:#dfe6e1; --t2:#5b6a62; --t1:#101814;
+  --amber:#c77d0a; --amber-bg:#fdf1dc; --r:12px;
+  font-family:'Space Grotesk',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+}
+*{box-sizing:border-box} html,body{margin:0;height:100%}
+body{background:var(--ink);color:var(--text);-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer} input,textarea,select{font:inherit}
+.hidden{display:none!important}
+.logo{font-weight:700;letter-spacing:-.02em;font-size:18px}.logo b{color:var(--green);font-weight:700}
+
+/* ---------- Intake ---------- */
+#intake{min-height:100%;display:flex;align-items:center;justify-content:center;padding:32px 16px}
+.panel{width:100%;max-width:560px;background:var(--ink2);border:1px solid var(--line);border-radius:20px;padding:36px}
+.panel h1{font-size:30px;letter-spacing:-.02em;margin:18px 0 8px}
+.panel p.sub{color:var(--mute);margin:0 0 22px;font-size:14px;line-height:1.5}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+label{display:block;font-size:12px;color:var(--mute);margin:14px 0 6px}
+.panel input,.panel textarea{width:100%;background:#0f1512;border:1px solid var(--line);color:var(--text);border-radius:8px;padding:11px 12px;font-size:14px;outline:none}
+.panel input:focus,.panel textarea:focus{border-color:var(--green)}
+.panel textarea{min-height:104px;resize:vertical}
+.cta{width:100%;margin-top:22px;background:var(--green);color:#06210f;border:0;border-radius:10px;padding:14px;font-weight:700;font-size:15px}
+.cta:hover{background:#56e898}.cta:disabled{opacity:.5;cursor:wait}
+.examples{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;align-items:center}
+.examples span{font-size:12px;color:var(--mute)}
+.chipbtn{background:transparent;border:1px solid var(--line);color:var(--text);border-radius:999px;padding:5px 11px;font-size:12px}
+.chipbtn:hover{border-color:var(--green);color:var(--green)}
+.err{margin-top:16px;background:#2a1717;border:1px solid #5a2a2a;color:#ffb4b4;border-radius:8px;padding:12px;font-size:13px;line-height:1.5}
+.err button{margin-top:8px;background:transparent;border:1px solid #ffb4b4;color:#ffb4b4;border-radius:6px;padding:5px 10px;font-size:12px}
+.fine{text-align:center;color:var(--mute);font-size:11px;margin-top:14px}
+.steps{margin-top:22px;display:grid;gap:10px}
+.step{display:flex;gap:10px;align-items:center;font-size:14px;color:var(--mute)}
+.step.on{color:var(--text)}.step.ok{color:var(--green)}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.step.on .dot{background:var(--green);animation:pulse 1s infinite}.step.ok .dot{background:var(--green)}
+@keyframes pulse{50%{opacity:.3}}
+
+/* ---------- App shell ---------- */
+#app{display:flex;min-height:100%;background:var(--bg);color:var(--t1)}
+aside{width:210px;background:var(--ink);color:var(--text);padding:22px 14px;display:flex;flex-direction:column;flex-shrink:0;position:sticky;top:0;height:100vh}
+aside nav{margin-top:24px;display:grid;gap:4px}
+.nav{background:transparent;border:0;color:var(--mute);text-align:left;padding:10px 12px;border-radius:8px;font-size:14px}
+.nav.on,.nav:hover{background:var(--ink2);color:var(--text)}
+.who{margin-top:auto;background:var(--ink2);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:12px;color:var(--mute);line-height:1.5}
+.who b{color:var(--text);display:block;font-size:13px}
+.who button{margin-top:8px;background:transparent;border:1px solid var(--line);color:var(--mute);border-radius:6px;padding:4px 9px;font-size:11px}
+main{flex:1;padding:30px 34px;max-width:1180px;min-width:0}
+.top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap}
+h2{margin:0;font-size:26px;letter-spacing:-.02em}
+.meta{color:var(--t2);font-size:13px;margin-top:4px}
+.btn{background:#fff;border:1px solid var(--border);border-radius:8px;padding:9px 14px;font-size:13px;color:var(--t1)}
+.btn:hover{border-color:#b9c6be}
+.btn.dark{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn.sm{padding:6px 12px;font-size:12px}
+.prog{margin:22px 0 6px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--t2)}
+.bar{flex:0 1 240px;height:6px;background:#d6dfd9;border-radius:99px;overflow:hidden;min-width:120px}
+.bar i{display:block;height:100%;background:var(--green);border-radius:99px;transition:width .4s}
+.pill{background:#fff;border:1px solid var(--border);border-radius:99px;padding:3px 10px;font-size:12px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:22px;margin-top:18px}
+.sec{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--t2);margin:20px 0 10px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:12px}
+.task{display:flex;gap:14px;align-items:flex-start;justify-content:space-between}
+.task.focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(61,220,132,.15)}
+.task h3{margin:6px 0 4px;font-size:16px;letter-spacing:-.01em}
+.task p{margin:0;color:var(--t2);font-size:13px;line-height:1.5}
+.task .deliv{margin-top:6px}.task .deliv b{color:var(--t1);font-weight:600}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.tag{font-size:11px;background:#eef2ef;border-radius:6px;padding:3px 8px;color:var(--t2)}
+.tag.g{background:#dff7e9;color:var(--green-d);font-weight:600}
+.badge{font-size:10px;font-weight:700;letter-spacing:.05em;border-radius:5px;padding:2px 7px;background:#e6ebe8;color:var(--t2)}
+.badge.done{background:#dff7e9;color:var(--green-d)}.badge.doing{background:var(--amber-bg);color:var(--amber)}
+.act{display:flex;flex-direction:column;gap:8px;flex-shrink:0}
+.check{width:26px;height:26px;border-radius:50%;background:var(--green);color:#06210f;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+.side .card h4{margin:0 0 10px;font-size:13px}
+.skill{font-size:12px;margin-bottom:10px}.skill .bar{flex:none;width:100%;margin-top:5px;height:5px}
+.focuscard{background:var(--ink);color:var(--text);border-radius:var(--r);padding:16px 18px;margin-bottom:12px}
+.focuscard small{color:var(--green);font-weight:600;letter-spacing:.04em;font-size:11px;text-transform:uppercase}
+.focuscard p{margin:8px 0 0;font-size:13px;line-height:1.5}
+.kv{font-size:12px;color:var(--t2);line-height:1.8}.kv b{color:var(--t1)}
+details.insight{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:12px 16px;margin-top:6px;font-size:13px;color:var(--t2)}
+details.insight summary{cursor:pointer;font-weight:600;color:var(--t1)}
+details.insight h5{margin:12px 0 4px;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--t2)}
+details.insight ul{margin:0;padding-left:18px;line-height:1.55}
+.banner{background:var(--amber-bg);color:#7a4b04;border-radius:8px;padding:9px 12px;font-size:12px;margin-top:14px}
+.empty{color:var(--t2);font-size:13px;padding:8px 0}
+.log{white-space:pre-wrap;background:#f5f8f6;border-radius:8px;padding:10px 12px;font-size:13px;margin-top:8px;color:var(--t1)}
+
+/* modal + toast */
+.scrim{position:fixed;inset:0;background:rgba(10,16,13,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:10}
+.modal{background:#fff;color:var(--t1);border-radius:14px;padding:22px;width:100%;max-width:460px}
+.modal h3{margin:0 0 4px}.modal p{margin:0 0 12px;color:var(--t2);font-size:13px}
+.modal textarea{width:100%;min-height:110px;border:1px solid var(--border);border-radius:8px;padding:10px;font-size:14px}
+.modal .r{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:8px;font-size:13px;z-index:20}
+
+@media(max-width:860px){
+  #app{flex-direction:column}
+  aside{width:100%;height:auto;position:static;flex-direction:row;align-items:center;gap:12px;padding:12px 14px;overflow-x:auto}
+  aside nav{margin:0;display:flex}.who{display:none}
+  main{padding:20px 16px}.grid{grid-template-columns:1fr}.row{grid-template-columns:1fr}
+  .task{flex-direction:column}.act{flex-direction:row}
+}
+</style>
+</head>
+<body>
+
+<!-- ================= INTAKE ================= -->
+<section id="intake">
+  <div class="panel">
+    <div class="logo"><b>AI</b>ntern</div>
+    <h1>Tell us about your internship</h1>
+    <p class="sub">We'll research the role and build a personalized curriculum of tasks and modules, so you leave with real skills, not just a resume line.</p>
+    <form id="form" autocomplete="off">
+      <div class="examples"><span>Try an example:</span>
+        <button type="button" class="chipbtn" data-ex="0">Fintech SWE</button>
+        <button type="button" class="chipbtn" data-ex="1">Healthcare analytics</button>
+        <button type="button" class="chipbtn" data-ex="2">Retail marketing</button>
+      </div>
+      <div class="row">
+        <div><label for="company">Company</label><input id="company" maxlength="120" required></div>
+        <div><label for="industry">Industry</label><input id="industry" maxlength="120" required></div>
+      </div>
+      <label for="job_title">Job title</label><input id="job_title" maxlength="120" required>
+      <label for="job_description">Job description</label>
+      <textarea id="job_description" maxlength="4000" required minlength="20" placeholder="Paste the description or describe what you'll be doing."></textarea>
+      <label for="skills">Skills you want to build</label>
+      <input id="skills" maxlength="500" required placeholder="Comma separated, e.g. cloud infrastructure, CI/CD, system design">
+      <button class="cta" id="go" type="submit">Build my curriculum &rarr;</button>
+      <div class="steps hidden" id="steps">
+        <div class="step" id="s1"><span class="dot"></span>Researching the role</div>
+        <div class="step" id="s2"><span class="dot"></span>Drafting tasks and ranking them against your goals</div>
+      </div>
+      <div class="err hidden" id="err"></div>
+      <div class="fine">Nothing is sent to your employer. Your plan is stored only in this browser.</div>
+    </form>
+  </div>
+</section>
+
+<!-- ================= APP ================= -->
+<div id="app" class="hidden">
+  <aside>
+    <div class="logo"><b>AI</b>ntern</div>
+    <nav>
+      <button class="nav on" data-view="dashboard">Dashboard</button>
+      <button class="nav" data-view="curriculum">Curriculum</button>
+      <button class="nav" data-view="progress">Progress</button>
+    </nav>
+    <div class="who" id="who"></div>
+  </aside>
+  <main id="main"></main>
+</div>
+
+<div id="modal" class="scrim hidden"></div>
+<div id="toast" class="hidden"></div>
+
+<script>
+const KEY = 'aintern_state_v1';
+let S = null;           // app state
+let view = 'dashboard';
+
+const EXAMPLES = [
+  {company:'Acme Corp', industry:'Fintech', job_title:'Software Engineering Intern',
+   job_description:'Backend intern on the payments infrastructure team, working mostly in Go and AWS. You will help maintain services that move money between accounts, fix bugs from the on-call backlog and add small features under a senior engineer.',
+   skills:'Cloud infrastructure, CI/CD, system design'},
+  {company:'Brightline Health', industry:'Healthcare', job_title:'Data Analyst Intern',
+   job_description:'Support the clinical operations analytics team. Pull data with SQL from the reporting warehouse, build weekly Tableau dashboards on patient wait times and staffing, and help answer ad hoc questions from operations managers.',
+   skills:'SQL, data storytelling, dashboard design, A/B testing'},
+  {company:'Northwind Retail', industry:'Retail', job_title:'Marketing Intern',
+   job_description:'Join the digital marketing team running email and paid social campaigns for a mid-size apparel retailer. Help schedule campaigns, pull performance reports and write copy variants for seasonal promotions.',
+   skills:'Campaign analytics, copywriting, customer segmentation'}
+];
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)); }catch(e){ return null; } }
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.remove('hidden'); clearTimeout(toast.t); toast.t=setTimeout(()=>t.classList.add('hidden'),3200); }
+
+/* ---------------- API ---------------- */
+async function api(path, body){
+  const r = await fetch(path, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
+  let data = {};
+  try{ data = await r.json(); }catch(e){}
+  if(!r.ok){
+    let msg = data.detail;
+    if(Array.isArray(msg)) msg = 'Please check the form: ' + msg.map(d=>(d.loc||[]).slice(-1)[0]+' '+d.msg).join('; ');
+    throw new Error(msg || 'Request failed ('+r.status+')');
+  }
+  return data;
+}
+
+/* ---------------- Intake ---------------- */
+document.querySelectorAll('[data-ex]').forEach(b => b.onclick = () => {
+  const ex = EXAMPLES[+b.dataset.ex];
+  Object.keys(ex).forEach(k => $('#'+k).value = ex[k]);
+});
+
+function setStep(n){
+  $('#steps').classList.remove('hidden');
+  ['s1','s2'].forEach((id,i)=>{ const e=$('#'+id); e.className='step'+(i+1<n?' ok':i+1===n?' on':''); });
+}
+
+$('#form').onsubmit = async ev => {
+  ev.preventDefault();
+  const intake = {};
+  ['company','industry','job_title','job_description','skills'].forEach(k => intake[k] = $('#'+k).value.trim());
+  $('#err').classList.add('hidden'); $('#go').disabled = true; $('#go').textContent = 'Working…';
+  try{
+    setStep(1);
+    const {brief} = await api('/api/research', intake);
+    setStep(2);
+    const plan = await api('/api/curriculum', {intake, brief});
+    S = {intake, brief, tasks: plan.tasks.map(t=>({...t, status:'todo', log:''})), mode:plan.mode,
+         goal_coverage:plan.goal_coverage, sample:false};
+    save(); view='dashboard'; showApp();
+  }catch(e){
+    const box=$('#err');
+    box.innerHTML = esc(e.message) + '<br><button type="button" id="usesample">Load a saved example plan instead</button>';
+    box.classList.remove('hidden');
+    $('#usesample').onclick = loadSample;
+  }finally{
+    $('#go').disabled=false; $('#go').textContent='Build my curriculum →'; $('#steps').classList.add('hidden');
+  }
+};
+
+async function loadSample(){
+  try{
+    const d = await (await fetch('/static/sample.json')).json();
+    S = {intake:d.intake, brief:d.brief, tasks:d.tasks.map(t=>({...t,status:'todo',log:''})), mode:d.mode,
+         goal_coverage:d.goal_coverage, sample:true};
+    save(); view='dashboard'; showApp();
+  }catch(e){ toast('Could not load the saved example.'); }
+}
+
+/* ---------------- App ---------------- */
+function showApp(){
+  $('#intake').classList.add('hidden'); $('#app').classList.remove('hidden');
+  render();
+}
+function showIntake(){
+  $('#app').classList.add('hidden'); $('#intake').classList.remove('hidden');
+}
+document.querySelectorAll('.nav').forEach(b => b.onclick = () => { view=b.dataset.view; render(); window.scrollTo(0,0); });
+
+const done = () => S.tasks.filter(t=>t.status==='done');
+const open = () => S.tasks.filter(t=>t.status!=='done')
+  .sort((a,b)=> (b.status==='doing')-(a.status==='doing') || b.priority-a.priority);
+const hrs = list => list.reduce((s,t)=>s+(+t.est_hours||0),0);
+
+function render(){
+  document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('on', b.dataset.view===view));
+  const i = S.intake;
+  $('#who').innerHTML = `<b>${esc(i.job_title)}</b>${esc(i.company)}<br>${esc(i.industry)}<br><button id="newplan">Start over</button>`;
+  $('#newplan').onclick = () => { if(confirm('Start over? This clears your current plan from this browser.')){ localStorage.removeItem(KEY); S=null; showIntake(); } };
+  $('#main').innerHTML = view==='curriculum' ? vCurriculum() : view==='progress' ? vProgress() : vDashboard();
+  bind();
+}
+
+function header(title){
+  const i=S.intake;
+  return `<div class="top"><div><h2>${title}</h2><div class="meta">${esc(i.industry)} · ${esc(i.job_title)} at ${esc(i.company)}</div></div>
+    <button class="btn" id="regen">Regenerate plan</button></div>
+    ${S.sample?'<div class="banner">Showing a saved example plan (generated earlier), not a live AI result. Use <b>Regenerate plan</b> to try again.</div>':''}`;
+}
+function progressRow(){
+  const d=done().length, n=S.tasks.length, left=hrs(open());
+  return `<div class="prog"><span>${d} of ${n} tasks complete</span><div class="bar"><i style="width:${n?100*d/n:0}%"></i></div>
+    <span class="pill">~${left} hrs remaining</span><span class="pill">ranked by ${esc(S.mode)}</span></div>`;
+}
+
+function taskCard(t, focus){
+  const isDone = t.status==='done';
+  const badge = isDone?'<span class="badge done">DONE</span>':t.status==='doing'?'<span class="badge doing">IN PROGRESS</span>':'<span class="badge">UP NEXT</span>';
+  const act = isDone ? '<div class="check">✓</div>' :
+    `<div class="act">${t.status==='doing'
+       ? `<button class="btn dark sm" data-finish="${t.id}">Mark done</button>`
+       : `<button class="btn dark sm" data-start="${t.id}">Start</button>`}</div>`;
+  return `<div class="card task ${focus?'focus':''}"><div>
+    ${badge}<h3>${esc(t.title)}</h3><p>${esc(t.objective)}</p>
+    <p class="deliv"><b>Deliverable:</b> ${esc(t.deliverable)}</p>
+    <div class="tags"><span class="tag g">${t.relevance}% match · ${esc(t.best_goal)}</span>
+      <span class="tag">~${t.est_hours} hr</span><span class="tag">${esc(t.stage)}</span></div>
+    ${isDone && t.log ? `<div class="log">${esc(t.log)}</div>`:''}
+  </div>${act}</div>`;
+}
+
+function sideCol(){
+  const o = open()[0], i=S.intake;
+  return `<div class="side">
+    <div class="card"><h4>Skills you're building</h4>${(S.goal_coverage||[]).map(g=>
+      `<div class="skill">${esc(g.goal)} <span style="float:right;color:var(--t2)">${g.pct}%</span><div class="bar"><i style="width:${g.pct}%"></i></div></div>`).join('')}</div>
+    ${o?`<div class="focuscard"><small>This week's focus</small><p>${esc(o.title)}. ${esc(o.deliverable)}</p></div>`:
+        `<div class="focuscard"><small>All done</small><p>Every task is complete. Export your deliverables from the Progress tab.</p></div>`}
+    <div class="card"><h4>Built from</h4><div class="kv"><b>Company</b> ${esc(i.company)}<br><b>Industry</b> ${esc(i.industry)}<br><b>Role</b> ${esc(i.job_title)}</div></div>
+  </div>`;
+}
+
+function insight(){
+  const b=S.brief||{}; const ul = a => `<ul>${(a||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;
+  return `<details class="insight"><summary>What the AI learned about your role</summary>
+    <p>${esc(b.role_summary)}</p>
+    <h5>Likely responsibilities</h5>${ul(b.likely_responsibilities)}
+    <h5>Likely skill gaps vs your goals</h5>${ul(b.skill_gaps)}
+    <h5>Good uses of downtime</h5>${ul(b.downtime_opportunities)}
+    <h5>Cautions</h5>${ul(b.cautions)}
+    <p style="font-size:11px;margin-top:12px">Based on what you entered and general industry knowledge, not live research on your company.</p></details>`;
+}
+
+function vDashboard(){
+  const o=open(), d=done();
+  return header('Your curriculum') + progressRow() + `<div class="grid"><div>
+    ${insight()}
+    <div class="sec">Up next, ranked for you</div>
+    ${o.length? o.map((t,i)=>taskCard(t,i===0)).join('') : '<div class="empty">Nothing left. Nice work.</div>'}
+    ${d.length? `<div class="sec">Completed</div>${d.map(t=>taskCard(t)).join('')}`:''}
+  </div>${sideCol()}</div>`;
+}
+
+function vCurriculum(){
+  const stages=['Foundations','Apply','Ship'];
+  const blurbs={Foundations:'Build the base knowledge you need first.',Apply:'Practise on realistic work for your role.',Ship:'Produce something you can show a mentor or employer.'};
+  return header('Full curriculum') + progressRow() + stages.map(s=>{
+    const list=S.tasks.filter(t=>t.stage===s); if(!list.length) return '';
+    return `<div class="sec">${s} · ${esc(blurbs[s])}</div>` + list.map(t=>taskCard(t)).join('');
+  }).join('');
+}
+
+function vProgress(){
+  const d=done().sort((a,b)=>(a.doneAt||0)-(b.doneAt||0));
+  return header('Your progress') + progressRow() + `<div class="grid"><div>
+    <div class="sec">Deliverables log</div>
+    ${d.length? d.map(t=>`<div class="card"><span class="badge done">DONE</span><h3 style="margin:6px 0">${esc(t.title)}</h3>
+        <p class="meta">${esc(t.deliverable)}</p>${t.log?`<div class="log">${esc(t.log)}</div>`:'<div class="meta">No notes logged.</div>'}</div>`).join('')
+      : '<div class="empty">Finish a task and log what you produced. It will show up here.</div>'}
+    ${d.length?'<button class="btn" id="export">Export deliverables (.md)</button>':''}
+  </div>${sideCol()}</div>`;
+}
+
+/* ---------------- Actions ---------------- */
+function bind(){
+  document.querySelectorAll('[data-start]').forEach(b=>b.onclick=()=>{ find(b.dataset.start).status='doing'; save(); render(); });
+  document.querySelectorAll('[data-finish]').forEach(b=>b.onclick=()=>finishDialog(b.dataset.finish));
+  const rg=$('#regen'); if(rg) rg.onclick=()=>{ if(confirm('Generate a fresh plan from your original inputs? Your progress on this plan will be lost.')) regenerate(); };
+  const ex=$('#export'); if(ex) ex.onclick=exportMd;
+}
+const find = id => S.tasks.find(t=>t.id===id);
+
+function finishDialog(id){
+  const t=find(id), m=$('#modal');
+  m.innerHTML=`<div class="modal"><h3>Log your output</h3><p>${esc(t.title)}<br>Deliverable: ${esc(t.deliverable)}</p>
+    <textarea id="logtxt" maxlength="1500" placeholder="What did you produce? Paste a link or a few notes (optional)."></textarea>
+    <div class="r"><button class="btn" id="mc">Cancel</button><button class="btn dark" id="ms">Save and re-rank</button></div></div>`;
+  m.classList.remove('hidden');
+  $('#mc').onclick=()=>m.classList.add('hidden');
+  $('#ms').onclick=async()=>{
+    t.status='done'; t.log=$('#logtxt').value.trim(); t.doneAt=Date.now();
+    m.classList.add('hidden'); save(); render(); await rerank();
+  };
+}
+
+async function rerank(){
+  try{
+    const r = await api('/api/rerank', {skills:S.intake.skills, tasks:S.tasks.map(t=>({id:t.id,title:t.title,stage:t.stage,objective:t.objective,skills:t.skills,done:t.status==='done'}))});
+    const by = Object.fromEntries(r.ranked.map(x=>[x.id,x]));
+    S.tasks.forEach(t=>{ const x=by[t.id]; if(x){ t.priority=x.priority; t.relevance=x.relevance; t.best_goal=x.best_goal; } });
+    S.goal_coverage=r.goal_coverage; S.mode=r.mode; save(); render(); toast('Plan re-ranked around what you have finished.');
+  }catch(e){ toast('Could not re-rank: '+e.message); }
+}
+
+async function regenerate(){
+  toast('Regenerating your plan…');
+  try{
+    const {brief}=await api('/api/research', S.intake);
+    const plan=await api('/api/curriculum',{intake:S.intake,brief});
+    S={...S,brief,tasks:plan.tasks.map(t=>({...t,status:'todo',log:''})),mode:plan.mode,goal_coverage:plan.goal_coverage,sample:false};
+    save(); render(); toast('New plan ready.');
+  }catch(e){ toast(e.message); }
+}
+
+function exportMd(){
+  const i=S.intake;
+  let md=`# Internship deliverables\n\n${i.job_title}, ${i.company} (${i.industry})\n\n`;
+  done().forEach(t=>{ md+=`## ${t.title}\n\n- Stage: ${t.stage}\n- Deliverable: ${t.deliverable}\n- Skills: ${(t.skills||[]).join(', ')}\n\n${t.log||'(no notes logged)'}\n\n`; });
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([md],{type:'text/markdown'}));
+  a.download='aintern-deliverables.md'; a.click(); URL.revokeObjectURL(a.href);
+}
+
+/* ---------------- Boot ---------------- */
+S = load();
+if(S && S.tasks && S.tasks.length) showApp(); else { S=null; showIntake(); }
+</script>
+</body>
+</html>
