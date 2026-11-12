@@ -100,6 +100,10 @@ details.insight ul{margin:0;padding-left:18px;line-height:1.55}
 .log{white-space:pre-wrap;background:#f5f8f6;border-radius:8px;padding:10px 12px;font-size:13px;margin-top:8px;color:var(--t1);max-height:220px;overflow:auto}
 
 /* ---------- Workbook ---------- */
+.skillrow{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:10px;font-size:12px;color:var(--t2)}
+.skillrow .tag.g{font-size:12px}
+.drop{display:block;border:2px dashed #b9c6be;border-radius:10px;padding:14px;text-align:center;font-size:13px;color:var(--t2);cursor:pointer;margin-bottom:8px}
+.drop.over{border-color:var(--green);background:#f1fbf5}.drop u{color:var(--green-d)}
 .wb{max-width:860px}
 .wb h4{margin:0 0 8px;font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--t2)}
 .wb p{font-size:14px;line-height:1.6;margin:0 0 8px}
@@ -202,6 +206,7 @@ let openId = null;      // task whose workbook is open
 let busy = null;        // 'wb:<id>' or 'rv:<id>' while an AI call runs
 const errs = {};        // per-task workbook error messages (not persisted)
 const MAX_FREE_ATTEMPTS = 3;
+const MAX_CHARS = 8000;
 
 const EXAMPLES = [
   {company:'Acme Corp', industry:'Fintech', job_title:'Software Engineering Intern',
@@ -317,8 +322,9 @@ function taskCard(t, focus){
     : `<button class="btn dark sm" data-open="${t.id}">Open workbook</button>`;
   return `<div class="card task ${focus?'focus':''}"><div>
     ${statusBadge(t)}<h3>${esc(t.title)}</h3><p>${esc(t.objective)}</p>
-    <p class="deliv"><b>You will produce:</b> ${esc(t.deliverable)}</p>
-    <div class="tags"><span class="tag g">${t.relevance}% match · ${esc(t.best_goal)}</span>
+    <p class="deliv"><b>You will submit:</b> ${esc(t.deliverable)}</p>
+    <div class="skillrow"><b style="color:var(--t1)">Skills you'll build:</b> ${(t.skills||[]).map(x=>`<span class="tag g">${esc(x)}</span>`).join('')}</div>
+    <div class="tags"><span class="tag">${t.relevance}% match to your goal: ${esc(t.best_goal)}</span>
       <span class="tag">~${t.est_hours} hr</span><span class="tag">${esc(t.stage)}</span>
       ${t.attempts.length?`<span class="tag">${t.attempts.length} review${t.attempts.length>1?'s':''}${la&&!t.verified?' · last: needs revision':''}</span>`:''}</div>
   </div><div class="act">${btn}</div></div>`;
@@ -329,7 +335,7 @@ function sideCol(){
   return `<div class="side">
     <div class="card"><h4>Skills you're building</h4>${(S.goal_coverage||[]).map(g=>
       `<div class="skill">${esc(g.goal)} <span style="float:right;color:var(--t2)">${g.pct}%</span><div class="bar"><i style="width:${g.pct}%"></i></div></div>`).join('')}</div>
-    ${o?`<div class="focuscard"><small>This week's focus</small><p>${esc(o.title)}. You will produce: ${esc(o.deliverable)}</p></div>`:
+    ${o?`<div class="focuscard"><small>This week's focus</small><p>${esc(o.title)}. You will submit: ${esc(o.deliverable)}</p></div>`:
         `<div class="focuscard"><small>All done</small><p>Every task is complete. Export your work from the Progress tab.</p></div>`}
     <div class="card"><h4>Built from</h4><div class="kv"><b>Company</b> ${esc(i.company)}<br><b>Industry</b> ${esc(i.industry)}<br><b>Role</b> ${esc(i.job_title)}</div></div>
   </div>`;
@@ -397,7 +403,9 @@ function vTask(){
   if(!t){ view='dashboard'; return vDashboard(); }
   const back = `<button class="btn sm" id="back">&larr; Back to plan</button>`;
   const head = `<div style="margin:14px 0 4px">${statusBadge(t)}</div><h2>${esc(t.title)}</h2>
-    <div class="meta">${esc(t.stage)} · ~${t.est_hours} hr · you will produce: ${esc(t.deliverable)}</div>`;
+    <div class="meta">${esc(t.stage)} · ~${t.est_hours} hr</div>
+    <div class="skillrow"><b style="color:var(--t1)">Skills you'll build:</b> ${(t.skills||[]).map(x=>`<span class="tag g">${esc(x)}</span>`).join('')}</div>
+    <p class="meta" style="margin-top:8px"><b style="color:var(--t1)">You will submit:</b> ${esc(t.deliverable)}</p>`;
   if(!t.workbook){
     const loading = busy==='wb:'+t.id;
     return `<div class="wb">${back}${head}<div class="card" style="margin-top:18px">${loading
@@ -419,10 +427,13 @@ function vTask(){
       ${w.hints&&w.hints.length?`<details style="margin-top:12px;font-size:13px"><summary style="cursor:pointer;color:var(--t2)">Stuck? Hints</summary><ul style="line-height:1.55">${w.hints.map(h=>`<li>${esc(h)}</li>`).join('')}</ul></details>`:''}</div>
     ${attempts?`<div class="sec" id="fb">Feedback</div>${attempts}`:''}
     ${passed?'':`<div class="card"><h4>Submit your work for review</h4><p class="meta" style="margin-bottom:10px">${esc(w.submission_format)}</p>
+      <label class="drop" id="drop">Drop a text file here (.txt .md .csv .sql .py .json .js .yaml) or <u>choose a file</u>
+        <input type="file" id="filepick" hidden accept=".txt,.md,.csv,.sql,.py,.json,.js,.ts,.yaml,.yml,.html,.tf,.go,.java,.sh,.r"></label>
+      <p class="meta" style="margin:0 0 8px">Slides, PDFs, images and Office files can't be read here. Paste the slide text, table or outline as plain text instead.</p>
       <textarea id="work" placeholder="Paste your work here" ${reviewing?'disabled':''}>${esc(t.draft||'')}</textarea>
       <div class="sub-row"><button class="btn green" id="submit" ${reviewing?'disabled':''}>${reviewing?'Reviewing…':(t.attempts.length?'Resubmit for review':'Get feedback')}</button>
         ${canSkip?'<button class="btn" id="skip">Move on without a passing review</button>':''}
-        <span class="meta">${reviewing?'Checking your work against the rubric (10 to 30 seconds).':'Attempt '+(t.attempts.length+1)+'. Feedback is specific to each rubric item.'}</span></div></div>`}
+        <span class="meta" id="count"></span><span class="meta">${reviewing?'Checking your work against the rubric (10 to 30 seconds).':'Attempt '+(t.attempts.length+1)+'. Feedback is specific to each rubric item.'}</span></div></div>`}
   </div>`;
 }
 
@@ -444,6 +455,7 @@ async function loadWorkbook(t){
 async function submitWork(id){
   const t=find(id), text=($('#work')||{}).value||'';
   if(text.trim().length<30){ toast('Add more detail first. Paste the work you were asked for (at least a few lines).'); return; }
+  if(text.length>MAX_CHARS){ toast('Too long: '+text.length+' characters (limit '+MAX_CHARS+'). Trim it and try again.'); return; }
   t.draft=text; save(); busy='rv:'+id; render();
   const w=t.workbook, la=lastAttempt(t);
   try{
@@ -479,7 +491,24 @@ function bind(){
   const rt=$('#retrywb'); if(rt) rt.onclick=()=>loadWorkbook(t);
   const sb=$('#submit'); if(sb) sb.onclick=()=>submitWork(t.id);
   const sk=$('#skip'); if(sk) sk.onclick=()=>skipReview(t.id);
-  const wk=$('#work'); if(wk) wk.oninput=()=>{ t.draft=wk.value; save(); };
+  const wk=$('#work');
+  const upd=()=>{ const c=$('#count'); if(c&&wk){ const n=wk.value.length; c.textContent=n+' / '+MAX_CHARS+' characters'; c.style.color=n>MAX_CHARS?'var(--red)':''; } };
+  if(wk){ wk.oninput=()=>{ t.draft=wk.value; save(); upd(); }; upd(); }
+  const loadFile=f=>{
+    if(!f) return;
+    if(f.size>200000){ toast('That file is too large. Paste the relevant part instead (limit '+MAX_CHARS+' characters).'); return; }
+    const rd=new FileReader();
+    rd.onload=()=>{ let x=String(rd.result||''); if(x.includes('\u0000')){ toast('That looks like a binary file. Only plain text files work.'); return; }
+      t.draft=x; save(); wk.value=x; upd(); toast(x.length>MAX_CHARS?'Loaded, but it is over '+MAX_CHARS+' characters. Trim it before submitting.':'File loaded into the box. Check it, then submit.'); };
+    rd.readAsText(f);
+  };
+  const dz=$('#drop'), fp=$('#filepick');
+  if(fp) fp.onchange=()=>{ loadFile(fp.files[0]); fp.value=''; };
+  if(dz){
+    ['dragenter','dragover'].forEach(e=>dz.addEventListener(e,ev=>{ev.preventDefault();dz.classList.add('over');}));
+    ['dragleave','drop'].forEach(e=>dz.addEventListener(e,ev=>{ev.preventDefault();dz.classList.remove('over');}));
+    dz.addEventListener('drop',ev=>loadFile(ev.dataTransfer.files[0]));
+  }
   document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=async()=>{
     try{ await navigator.clipboard.writeText(t.workbook.materials[+b.dataset.copy].content); toast('Copied.'); }catch(e){ toast('Copy failed. Select the text and copy it manually.'); } });
   document.querySelectorAll('[data-dl]').forEach(b=>b.onclick=()=>{ const m=t.workbook.materials[+b.dataset.dl]; dl(m.name, m.content); });
