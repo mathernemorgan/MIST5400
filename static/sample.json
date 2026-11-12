@@ -41,7 +41,7 @@
    "title": "Map the payments deployment pipeline",
    "stage": "Foundations",
    "objective": "Understand how code you touch gets from a pull request to production.",
-   "deliverable": "A written walkthrough (outline) of the build, test and deploy stages, with an owner for each stage.",
+   "deliverable": "A written walkthrough (outline) of the build, test and deploy stages, with an owner for each stage, pasted as text.",
    "est_hours": 2,
    "skills": [
     "CI/CD",
@@ -56,7 +56,7 @@
    "title": "Shadow an incident postmortem",
    "stage": "Foundations",
    "objective": "See how reliability problems are diagnosed and what gets fixed afterwards.",
-   "deliverable": "A half-page summary of the incident timeline, root cause and follow-up actions.",
+   "deliverable": "A half-page summary of the incident timeline, root cause and follow-up actions, pasted as text.",
    "est_hours": 2,
    "skills": [
     "system design",
@@ -71,7 +71,7 @@
    "title": "Sketch the architecture of one service you work on",
    "stage": "Foundations",
    "objective": "Practise reading a real system and naming its components and failure points.",
-   "deliverable": "A written architecture description plus a list of three failure modes and how each is handled.",
+   "deliverable": "A written architecture description plus a list of three failure modes and how each is handled, pasted as text.",
    "est_hours": 3,
    "skills": [
     "system design"
@@ -85,7 +85,7 @@
    "title": "Write a Terraform module for a staging environment",
    "stage": "Apply",
    "objective": "Learn infrastructure as code by describing a small cloud environment as code.",
-   "deliverable": "A Terraform module in a sandbox account that creates a queue, a function and a storage bucket.",
+   "deliverable": "A Terraform module in a sandbox account that creates a queue, a function and a storage bucket, pasted as text.",
    "est_hours": 5,
    "skills": [
     "cloud infrastructure",
@@ -100,7 +100,7 @@
    "title": "Add a CI workflow with tests and linting to a side repo",
    "stage": "Apply",
    "objective": "Practise building a pipeline that blocks bad changes before merge.",
-   "deliverable": "A repository with a working CI workflow that runs tests and linting on every pull request.",
+   "deliverable": "A repository with a working CI workflow that runs tests and linting on every pull request, pasted as text.",
    "est_hours": 4,
    "skills": [
     "CI/CD"
@@ -114,7 +114,7 @@
    "title": "Design a retry-safe money transfer API on paper",
    "stage": "Apply",
    "objective": "Apply system design thinking to idempotency, retries and consistency.",
-   "deliverable": "A two-page design doc with an API sketch, a data model and a failure-handling section.",
+   "deliverable": "A two-page design doc with an API sketch, a data model and a failure-handling section, pasted as text.",
    "est_hours": 5,
    "skills": [
     "system design",
@@ -129,7 +129,7 @@
    "title": "Add a canary deployment step to your sandbox pipeline",
    "stage": "Ship",
    "objective": "Combine pipeline and infrastructure skills into a safer release process.",
-   "deliverable": "A README and pipeline config (as text) showing a canary release step and the rule that triggers an automatic rollback.",
+   "deliverable": "A README and pipeline config (as text) showing a canary release step and the rule that triggers an automatic rollback, pasted as text.",
    "est_hours": 6,
    "skills": [
     "CI/CD",
@@ -144,7 +144,7 @@
    "title": "Write up your design doc and pipeline for your mentor",
    "stage": "Ship",
    "objective": "Turn practice work into a clear written summary you can get feedback on.",
-   "deliverable": "A one-page written summary of your design doc and pipeline for your mentor, plus three questions you would ask them.",
+   "deliverable": "A one-page written summary of your design doc and pipeline for your mentor, plus three questions you would ask them, pasted as text.",
    "est_hours": 2,
    "skills": [
     "system design",
